@@ -1,0 +1,137 @@
+/* ============================================================
+   Inkloom design tokens
+   ------------------------------------------------------------
+   Concept: "ink & thread" — a dense, quiet ink-dark workspace
+   with a single warm gold thread running through it for
+   anything actionable. Not glassy, not neon, not generic
+   indigo-on-black. Import this once from App.tsx alongside
+   your existing base.css; it only adds variables and a few
+   global rules, so it won't fight with what's already there.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Surfaces — ink, not slate. Slightly warm, never pure black. */
+  --ink-950: #0a0a10;
+  --ink-900: #111219;
+  --ink-850: #15161f;
+  --ink-800: #191a24;
+  --ink-700: rgba(255, 255, 255, 0.08);
+  --ink-600: #3d4568; /* quiet structural navy — badges, muted accents */
+
+  /* Thread — the one warm, signature color. Use it sparingly:
+     primary actions, active states, focus rings, the brand mark. */
+  --thread: #d6a24a;
+  --thread-strong: #e6b562;
+  --thread-soft: rgba(214, 162, 74, 0.14);
+  --thread-ink: #1f1608; /* text color ON thread-colored surfaces */
+
+  /* Text */
+  --text-primary: #f1f1f5;
+  --text-secondary: #9497ab;
+  --text-tertiary: #5c5f72;
+
+  /* Status */
+  --success: #6fae8c;
+  --success-soft: rgba(111, 174, 140, 0.14);
+  --danger: #d97e86;
+  --danger-soft: rgba(217, 126, 134, 0.14);
+
+  /* Type */
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+
+  /* Radius scale */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadow — soft, ink-tinted, not generic grey */
+  --shadow-sm: 0 1px 2px rgba(4, 4, 8, 0.4);
+  --shadow-md: 0 8px 24px -8px rgba(4, 4, 8, 0.55);
+  --shadow-lg: 0 24px 48px -16px rgba(4, 4, 8, 0.6);
+  --shadow-thread: 0 8px 20px -6px rgba(214, 162, 74, 0.35);
+
+  /* Motion — one consistent premium easing + a small duration scale */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 420ms;
+}
+
+/* Respect reduced-motion globally; components should still check this
+   themselves for anything driven by JS, but this covers pure-CSS motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Thin, quiet scrollbars that match the ink surfaces instead of the
+   browser default. Firefox + WebKit. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-600) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--ink-600);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--thread); }
+
+/* One consistent focus ring everywhere, thread-colored, visible on
+   both dark and elevated surfaces — never remove focus outlines. */
+:focus-visible {
+  outline: 2px solid var(--thread);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---- Small keyframe library, used deliberately and sparingly ---- */
+
+/* The single orchestrated reveal for the empty/welcome state. */
+@keyframes thread-draw {
+  from { stroke-dashoffset: 240; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes rise-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing indicator dots */
+@keyframes dot-pulse {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-3px); opacity: 1; }
+}
+
+/* Skeleton shimmer for loading states */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-800);
+  border-radius: var(--radius-md);
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: shimmer 1.6s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}
