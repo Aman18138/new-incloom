@@ -9,7 +9,7 @@ import { ChatMessage, BrandStrategy, PageSection, LayoutOption, ChatAttachment }
 import { LayoutGrid, Settings } from 'lucide-react';
 import './styles/theme.css';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://inkloom-backend.onrender.com';
 
 const now = () => new Date().toLocaleTimeString();
 
